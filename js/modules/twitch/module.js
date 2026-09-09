@@ -459,6 +459,7 @@ async function twitchFollowMessage(data) {
 async function twitchAnnouncementMessage(data) {
 
     if (showTwitchAnnouncements == false) return;
+    if (ignoreUserList.includes(data.user.login)) return;
 
     const template = chatTemplate;
 	const clone = template.content.cloneNode(true);
@@ -502,9 +503,6 @@ async function twitchAnnouncementMessage(data) {
 
     header.innerHTML = `<span><i class="fa-solid fa-bullhorn"></i> ${tRD('twitch.announcement_header')}</span>`;
 
-
-    
-
     const userLinkElement = user.querySelector('a');
     const userLink = `https://twitch.tv/${data.user.login}`;
 
@@ -513,9 +511,6 @@ async function twitchAnnouncementMessage(data) {
     userLinkElement.style = `--user-color: ${data.user.color}`;
     userLinkElement.textContent = data.user.name;
     userLinkElement.title = `${data.user.name} @ ${userLink}`;
-
-
-
 
     if (showBadges) badges.innerHTML = badgeList; else badges.remove();
 
@@ -1311,7 +1306,7 @@ async function twitchUserBanned(data, type = null) {
             .map(el => [el.className, el])
     );
 
-    const classes = ['twitch', 'hidden-event'];
+    const classes = ['twitch', 'hidden-event', 'user-banned'];
 
     const targetUser = data.targetUser.name;
     const targetLogin = data.targetUser.login;
@@ -1366,7 +1361,7 @@ async function twitchUserUnBanned(data, type = null) {
             .map(el => [el.className, el])
     );
 
-    const classes = ['twitch', 'hidden-event'];
+    const classes = ['twitch', 'hidden-event', 'user-unbanned'];
 
     const targetUser = data.targetUser.name;
     const targetLogin = data.targetUser.login;
@@ -1419,7 +1414,7 @@ async function twitchAutoModMessageHeld(data) {
             .map(el => [el.className, el])
     );
 
-    const classes = ['twitch', 'hidden-event'];
+    const classes = ['twitch', 'hidden-event', 'automod'];
 
     user.textContent = 'AutoMod';
 
@@ -1466,7 +1461,7 @@ async function twitchAutoModMessageUpdate(data) {
             .map(el => [el.className, el])
     );
 
-    const classes = ['twitch', 'hidden-event'];
+    const classes = ['twitch', 'hidden-event', 'automod'];
 
     user.textContent = 'AutoMod';
 
@@ -2318,7 +2313,7 @@ async function twitchAdRunMessage(data) {
             .map(el => [el.className, el])
     );
 
-    const classes = ['twitch', 'hidden-event'];
+    const classes = ['twitch', 'hidden-event', 'adrun'];
 
     const adDuration = data.length_seconds ? data.length_seconds : data.lengthSeconds;
     const adLength = convertTime(adDuration * 1000);
@@ -2354,7 +2349,7 @@ async function twitchUpcomingAdMessage(data) {
             .map(el => [el.className, el])
     );
 
-    const classes = ['twitch', 'hidden-event'];
+    const classes = ['twitch', 'hidden-event', 'upcoming-ad'];
 
     header.remove();
     value.remove();

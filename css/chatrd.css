@@ -33,7 +33,6 @@ html {
     height: 100dvh;
     overflow-wrap: break-word;
     scroll-behavior: smooth;
-    font-size: 16px;
 }
 
 
@@ -42,6 +41,7 @@ body {
     font-optical-sizing: auto;
     height: 100%;
     overflow: hidden;
+    font-size: 16px;
 }
 
 body.preview {
@@ -1138,7 +1138,7 @@ body:has(.chat.noscrollbar) #bars {
 .modal-content label {
 	display: flex;
 	flex-direction: column;
-	font-size: 0.9em;
+	font-size: 16px;
 }
 
 .modal-buttons {

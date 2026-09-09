@@ -999,7 +999,7 @@ async function kickUserBanned(data) {
             .map(el => [el.className, el])
     );
 
-    const classes = ['kick', 'hidden-event'];
+    const classes = ['kick', 'hidden-event', 'user-banned'];
 
     const targetUser = data.user.username;
     const targetLogin = data.user.slug;
@@ -1055,7 +1055,7 @@ async function kickUserUnBanned(data) {
             .map(el => [el.className, el])
     );
 
-    const classes = ['kick', 'hidden-event'];
+    const classes = ['kick', 'hidden-event', 'user-unbanned'];
 
     const targetUser = data.user.username;
     const targetLogin = data.user.slug;

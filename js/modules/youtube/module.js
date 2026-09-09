@@ -625,7 +625,7 @@ async function youTubeUserBanned(data) {
             .map(el => [el.className, el])
     );
 
-    const classes = ['youtube', 'hidden-event'];
+    const classes = ['youtube', 'hidden-event', 'user-banned'];
 
     const targetId = data.targetUser.id;
     const targetUser = data.targetUser.name;
