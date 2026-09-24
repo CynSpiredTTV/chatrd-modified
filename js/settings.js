@@ -992,7 +992,7 @@ async function setUpDetails() {
     });
     
 
-    // CynSpired presets: load a preset into the settings, keeping connection settings
+    // CynSpired presets: load a preset into the settings, keeping connection + demo mode settings
     const CYNSPIRED_PRESETS = {
         dock: 'skin=default&showTwitch=true&showYoutube=true&showTiktok=true&showKick=false&chatField=true&chatModeration=true&showTwitchViewers=true&showYouTubeStatistics=true&showTikTokStatistics=true&showTikTokJoins=false&showTikTokLikes=false',
         stream: 'skin=cynspired&showTwitch=true&showYoutube=true&showTiktok=true&showKick=false&showAvatar=false&showTimestamps=false&showPlatformStatistics=false&showTikTokJoins=false&showTikTokLikes=false&showTikTokShares=false',
@@ -1005,7 +1005,7 @@ async function setUpDetails() {
             const saved = JSON.parse(localStorage.getItem('chatrdWidgetSettings') || '{}');
 
             Object.entries(saved).forEach(([key, value]) => {
-                if (/^(streamerBot|speakerBot)/.test(key)) url.searchParams.set(key, value);
+                if (/^(streamerBot|speakerBot|testMode)/.test(key)) url.searchParams.set(key, value);
             });
 
             await importChatRDSettings(url.toString());
