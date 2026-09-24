@@ -136,13 +136,56 @@
                     </div>
 
                 </wa-details>
-                
 
 
 
+                <!-- ── CynSpired Presets ──────────────────────────────────── -->
+                <wa-details id="cynspired-presets" class="section" open>
+
+                    <span class="header" slot="summary">
+                        <span class="title"><i class="ri-magic-fill"></i> <span>CynSpired Presets</span></span>
+                    </span>
+
+                    <div class="config full">
+                        <div class="info">
+                            <div class="description"><small>Loads one of the three setups into the settings below. Tweak anything you like, then hit <strong>Copy URL</strong> and paste it into OBS. Your Streamer.bot connection settings are kept.</small></div>
+                        </div>
+                    </div>
+
+                    <div class="config">
+                        <div class="info">
+                            <div class="title">OBS Dock</div>
+                            <div class="description"><small>Default ChatRD look · Twitch + YouTube + TikTok · chat box and mod buttons</small></div>
+                        </div>
+                        <div class="element">
+                            <wa-button data-cynspired-preset="dock" appearance="outlined" size="small">Load</wa-button>
+                        </div>
+                    </div>
+
+                    <div class="config">
+                        <div class="info">
+                            <div class="title">Stream (16:9)</div>
+                            <div class="description"><small>CynSpired skin · Twitch + YouTube + TikTok merged, with events · for Twitch/YouTube</small></div>
+                        </div>
+                        <div class="element">
+                            <wa-button data-cynspired-preset="stream" appearance="outlined" size="small">Load</wa-button>
+                        </div>
+                    </div>
+
+                    <div class="config">
+                        <div class="info">
+                            <div class="title">TikTok (9:16)</div>
+                            <div class="description"><small>CynSpired Vertical skin · TikTok only · messages fade after 45s</small></div>
+                        </div>
+                        <div class="element">
+                            <wa-button data-cynspired-preset="tiktok" appearance="outlined" size="small">Load</wa-button>
+                        </div>
+                    </div>
+
+                </wa-details>
 
 
-                
+
                 <!-- ── Speaker.bot ───────────────────────────────────────── -->
                 <wa-details id="speakerbot" class="section">
 
@@ -581,6 +624,8 @@
                                 <wa-option value="kimballs" data-i18n="general.skin_options.kimballs">Kimballs</wa-option>
                                 <wa-option value="bubbles" data-i18n="general.skin_options.bubbles">Bubbles</wa-option>
                                 <wa-option value="star-wars">Star Wars</wa-option>
+                                <wa-option value="cynspired">CynSpired</wa-option>
+                                <wa-option value="cynspired-vertical">CynSpired (Vertical)</wa-option>
                             </wa-select>
                         </div>
                     </div>

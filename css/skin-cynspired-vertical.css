@@ -1,0 +1,115 @@
+/* =========================================================
+   CYNSPIRED — Vertical / TikTok skin for ChatRD
+
+   Pared-back version of skin-cynspired.css for 9:16 canvases:
+   name and message share one line, no platform chips, lighter
+   cards so the chat doesn't cover the camera. Builds on the
+   main skin and only overrides what changes.
+
+   Use with ?skin=cynspired-vertical
+   ========================================================= */
+
+@import url('skin-cynspired.css?nocache=87');
+
+:root {
+    --cs-pad-x: 14px;
+    --cs-pad-y: 8px;
+    --cs-radius: 14px;
+    --cs-bg: rgba(20, 14, 10, 0.62);
+}
+
+#chat.vertical {
+    gap: 6px;
+}
+#chat.vertical.btt {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 120px);
+            mask-image: linear-gradient(to bottom, transparent 0, #000 120px);
+}
+
+
+/* ============= MESSAGE: single line ============= */
+
+:is(#chat, #chat-ghost) .item {
+    font-size: 24px;
+    line-height: 1.35;
+}
+
+:is(#chat, #chat-ghost) .item .message,
+:is(#chat, #chat-ghost).add-highlights .item.streamer-mentioned .message,
+:is(#chat, #chat-ghost) .item.first-chatter .message {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+    border-color: transparent;
+}
+
+:is(#chat, #chat-ghost).vertical .item .info {
+    display: inline-flex;
+    vertical-align: baseline;
+    margin-right: 6px;
+    gap: 6px;
+}
+:is(#chat, #chat-ghost) .item .actual-message {
+    display: inline;
+    font-weight: 400;
+}
+
+/* Single platform on this canvas: drop the chip and edge stripe */
+:is(#chat, #chat-ghost) .item .info .platform,
+:is(#chat, #chat-ghost) .event .info .platform {
+    display: none;
+}
+:is(#chat, #chat-ghost) .item .message::after {
+    display: none;
+}
+
+:is(#chat, #chat-ghost) .item .first-message,
+:is(#chat, #chat-ghost) .item .reply {
+    display: none;
+}
+
+/* Keep the role cues, but quieter */
+:is(#chat, #chat-ghost) .item.streamer .message {
+    box-shadow: 0 0 0 1px rgba(255,170,90,.35);
+}
+:is(#chat, #chat-ghost).add-highlights .item.streamer-mentioned .message,
+:is(#chat, #chat-ghost) .item.first-chatter .message {
+    box-shadow: 0 0 0 1px rgba(255,184,107,.45);
+}
+
+
+/* ============= EVENTS: compact pill ============= */
+
+:is(#chat, #chat-ghost) .event {
+    font-size: 22px;
+}
+
+:is(#chat, #chat-ghost) .event:not(.hidden-event) .message {
+    display: block;
+    width: auto;
+    padding: 8px 16px;
+    border-radius: 14px;
+    box-shadow: 0 0 0 1px rgba(255,170,90,.10);
+}
+:is(#chat, #chat-ghost) .event:not(.hidden-event) .message::before,
+:is(#chat, #chat-ghost) .event:not(.hidden-event) .message::after {
+    width: 18px; height: 18px;
+}
+:is(#chat, #chat-ghost) .event:not(.hidden-event) .message::after {
+    border-color: var(--amber);
+}
+
+:is(#chat, #chat-ghost) .event .info {
+    font-size: 1.1em;
+    gap: 5px;
+}
+:is(#chat, #chat-ghost) .event .actual-message {
+    font-size: 18px;
+}
+:is(#chat, #chat-ghost) .event .value .gift-info .gift-image img {
+    width: 28px;
+    height: 28px;
+}

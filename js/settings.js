@@ -992,6 +992,27 @@ async function setUpDetails() {
     });
     
 
+    // CynSpired presets: load a preset into the settings, keeping connection settings
+    const CYNSPIRED_PRESETS = {
+        dock: 'skin=default&showTwitch=true&showYoutube=true&showTiktok=true&showKick=false&chatField=true&chatModeration=true&showTwitchViewers=true&showYouTubeStatistics=true&showTikTokStatistics=true&showTikTokJoins=false&showTikTokLikes=false',
+        stream: 'skin=cynspired&showTwitch=true&showYoutube=true&showTiktok=true&showKick=false&showAvatar=false&showTimestamps=false&showPlatformStatistics=false&showTikTokJoins=false&showTikTokLikes=false&showTikTokShares=false',
+        tiktok: 'skin=cynspired-vertical&showTwitch=false&showYoutube=false&showTiktok=true&showKick=false&showAvatar=false&showTimestamps=false&showPlatform=false&showPlatformStatistics=false&showTikTokJoins=false&showTikTokLikes=false&showTikTokShares=false&hide=45'
+    };
+
+    document.querySelectorAll('[data-cynspired-preset]').forEach((button) => {
+        button.addEventListener('click', async () => {
+            const url = new URL('chat.html?' + CYNSPIRED_PRESETS[button.dataset.cynspiredPreset], window.location.href);
+            const saved = JSON.parse(localStorage.getItem('chatrdWidgetSettings') || '{}');
+
+            Object.entries(saved).forEach(([key, value]) => {
+                if (/^(streamerBot|speakerBot)/.test(key)) url.searchParams.set(key, value);
+            });
+
+            await importChatRDSettings(url.toString());
+        });
+    });
+
+
     const importUrlButton = document.getElementById("openImportModal");
     importUrlButton.addEventListener("click", async () => {
         const dialog = document.querySelector('#modalUrlImport');

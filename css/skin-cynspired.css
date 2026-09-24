@@ -1,0 +1,367 @@
+/* =========================================================
+   CYNSPIRED — Tan Lofi skin for ChatRD
+
+   Port of the CynSpired StreamElements chat widget
+   (Chat_Widget/styles.css) onto ChatRD's markup, so one
+   Streamer.bot feed can drive Twitch / YouTube / TikTok / Kick.
+
+   Use with ?skin=cynspired. Best with the vertical layout
+   (chatOneLine=false, chatHorizontal=false) and
+   showAvatar=false, showTimestamps=false for the classic look.
+
+   Selectors are prefixed with :is(#chat, #chat-ghost) so they
+   out-rank the per-platform module.css files, which load after
+   this skin and would otherwise repaint events purple/red/etc.
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&family=Inter:wght@300;400;500;700&family=JetBrains+Mono:wght@500&display=swap');
+
+:root {
+    /* Tan Lofi palette */
+    --paper:    #e8d9c0;
+    --amber:    #e9a857;
+    --copper:   #c2733a;
+    --glow:     #ffb86b;
+
+    --cs-radius: 10px;
+    --cs-pad-x: 18px;
+    --cs-pad-y: 14px;
+    --cs-blur: 6px;
+    --cs-bg: rgba(20, 14, 10, 0.55);
+    --cs-bg-strong: rgba(40, 28, 20, 0.85);
+    --cs-msg-color: rgba(232, 217, 192, 0.92);
+    --cs-shadow: 0 6px 24px rgba(0, 0, 0, .35);
+
+    --cs-mod-tint: rgba(110, 200, 130, 0.10);
+    --cs-vip-tint: rgba(200, 110, 200, 0.10);
+    --cs-sub-tint: rgba(255, 170, 90, 0.10);
+    --cs-streamer-tint: rgba(255, 170, 90, 0.18);
+}
+
+/* ---------- Per-platform accent ----------
+   The only thing that changes between platforms: a thin edge
+   stripe on each card, the logo chip tint, and the avatar ring. */
+.chat .twitch  { --cs-plat: #9146ff; --cs-plat-2: #bf94ff; }
+.chat .youtube { --cs-plat: #ff3b3b; --cs-plat-2: #ff8a80; }
+.chat .tiktok  { --cs-plat: #25f4ee; --cs-plat-2: #fe2c55; }
+.chat .kick    { --cs-plat: #53fc18; --cs-plat-2: #b6ff9a; }
+
+
+/* ============= CONTAINER ============= */
+
+/* Soft top fade as messages leave — a mask, so it stays
+   transparent over any scene background. */
+#chat.vertical.btt {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 80px);
+            mask-image: linear-gradient(to bottom, transparent 0, #000 80px);
+}
+
+
+/* ============= MESSAGE CARD ============= */
+
+:is(#chat, #chat-ghost) .item {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--paper);
+}
+
+:is(#chat, #chat-ghost) .item.msg { text-shadow: none; }
+:is(#chat, #chat-ghost) .item.msg img { filter: none; }
+
+:is(#chat, #chat-ghost) .item .message,
+:is(#chat, #chat-ghost).add-highlights .item.streamer-mentioned .message,
+:is(#chat, #chat-ghost) .item.first-chatter .message {
+    position: relative;
+    display: flex;
+    width: 100%;
+    padding: var(--cs-pad-y) var(--cs-pad-x);
+    border-radius: var(--cs-radius);
+    background: var(--cs-bg);
+    backdrop-filter: blur(var(--cs-blur));
+    -webkit-backdrop-filter: blur(var(--cs-blur));
+    border: 1px solid rgba(232, 217, 192, 0.06);
+    box-shadow: var(--cs-shadow);
+    gap: 4px;
+}
+
+/* Platform edge stripe (left) */
+:is(#chat, #chat-ghost) .item .message::after {
+    content: "";
+    position: absolute;
+    left: 0; top: 10px; bottom: 10px;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: linear-gradient(180deg, var(--cs-plat, transparent), var(--cs-plat-2, transparent));
+    opacity: .75;
+}
+
+/* Role hairline (top) */
+:is(#chat, #chat-ghost) .item .message::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 2px;
+    border-radius: var(--cs-radius) var(--cs-radius) 0 0;
+    background: transparent;
+}
+
+
+/* ----- Role highlights ----- */
+
+:is(#chat, #chat-ghost) .item.streamer .message {
+    background: linear-gradient(180deg, var(--cs-streamer-tint), var(--cs-bg-strong));
+    border-color: rgba(255, 170, 90, 0.45);
+    box-shadow: 0 8px 28px rgba(0,0,0,.4), 0 0 0 1px rgba(255,170,90,.08), inset 0 1px 0 rgba(255,220,180,.08);
+}
+:is(#chat, #chat-ghost) .item.streamer .message::before {
+    background: linear-gradient(90deg, transparent, var(--amber), var(--glow), var(--amber), transparent);
+    box-shadow: 0 0 12px var(--glow);
+}
+
+:is(#chat, #chat-ghost) .item.moderator:not(.streamer) .message {
+    background: linear-gradient(180deg, var(--cs-mod-tint), var(--cs-bg));
+    border-color: rgba(110, 200, 130, 0.28);
+}
+:is(#chat, #chat-ghost) .item.moderator:not(.streamer) .message::before {
+    background: linear-gradient(90deg, transparent, #6ec882, transparent);
+    opacity: .7;
+}
+
+:is(#chat, #chat-ghost) .item.vip:not(.streamer):not(.moderator) .message {
+    background: linear-gradient(180deg, var(--cs-vip-tint), var(--cs-bg));
+    border-color: rgba(200, 110, 200, 0.28);
+}
+:is(#chat, #chat-ghost) .item.vip:not(.streamer):not(.moderator) .message::before {
+    background: linear-gradient(90deg, transparent, #c870c8, transparent);
+    opacity: .7;
+}
+
+/* Twitch/TikTok subscribers + YouTube members (sponsor) */
+:is(#chat, #chat-ghost) .item:is(.subscriber, .sponsor):not(.streamer):not(.moderator):not(.vip) .message {
+    background: linear-gradient(180deg, var(--cs-sub-tint), var(--cs-bg));
+    border-color: rgba(255, 170, 90, 0.22);
+}
+
+/* Mentions of the streamer + first-time chatters: warm glow ring */
+:is(#chat, #chat-ghost).add-highlights .item.streamer-mentioned .message,
+:is(#chat, #chat-ghost) .item.first-chatter .message {
+    border-color: rgba(255, 184, 107, 0.55);
+    box-shadow: var(--cs-shadow), 0 0 0 1px rgba(255,184,107,.12), 0 0 18px rgba(255,170,90,.18);
+}
+
+:is(#chat, #chat-ghost) .item .first-message,
+:is(#chat, #chat-ghost) .item .header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--amber);
+}
+:is(#chat, #chat-ghost) .item .header:empty { display: none; }
+
+:is(#chat, #chat-ghost) .item .reply {
+    font-size: 14px;
+    color: rgba(232, 217, 192, 0.5);
+}
+
+
+/* ----- Head line: platform, badges, name ----- */
+
+:is(#chat, #chat-ghost) .item .info {
+    gap: 8px;
+    align-items: center;
+}
+
+:is(#chat, #chat-ghost) .item .info .platform {
+    align-items: center;
+    justify-content: center;
+    padding: 3px 6px;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--cs-plat, #fff) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--cs-plat, #fff) 35%, transparent);
+}
+:is(#chat, #chat-ghost) .item .info .platform img {
+    height: 14px;
+    width: auto;
+}
+
+:is(#chat, #chat-ghost) .item .badges:empty { display: none; }
+:is(#chat, #chat-ghost) .item .badges img {
+    height: 18px;
+    width: 18px;
+    border-radius: 3px;
+    margin: 0 1px;
+}
+
+:is(#chat, #chat-ghost) .item .info .avatar {
+    box-shadow: 0 0 0 2px var(--cs-plat, var(--amber));
+}
+
+:is(#chat, #chat-ghost) .item .info .timestamp,
+:is(#chat, #chat-ghost) .item .info .pronouns {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .08em;
+    height: 22px;
+    min-width: 0;
+    color: rgba(232, 217, 192, 0.7);
+    background: rgba(232, 217, 192, 0.06);
+    border: 1px solid rgba(232, 217, 192, 0.10);
+}
+
+:is(#chat, #chat-ghost) .item .user a {
+    font-weight: 700;
+    letter-spacing: -0.005em;
+    /* Lift very dark user colors toward paper so they read on the dark card */
+    color: color-mix(in srgb, var(--user-color, var(--paper)) 80%, var(--paper));
+}
+:is(#chat, #chat-ghost) .item .user a::after {
+    content: ":";
+    margin-left: 4px;
+    font-weight: 400;
+    color: rgba(232, 217, 192, 0.35);
+}
+
+
+/* ----- Body ----- */
+
+:is(#chat, #chat-ghost) .item .actual-message {
+    color: var(--cs-msg-color);
+    font-weight: 300;
+}
+:is(#chat, #chat-ghost) .item .actual-message img.emote {
+    height: 1.4em;
+    margin: -0.2em 0.05em;
+}
+:is(#chat, #chat-ghost) .item .actual-message a {
+    color: var(--glow);
+    font-weight: 400;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 170, 90, 0.4);
+    text-underline-offset: 2px;
+}
+:is(#chat, #chat-ghost) .item .actual-message a:hover { text-shadow: none; }
+
+
+/* ============= EVENT / ALERT ROW ============= */
+
+:is(#chat, #chat-ghost) .event {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 22px;
+    color: var(--paper);
+    text-shadow: none;
+}
+
+:is(#chat, #chat-ghost) .event:not(.hidden-event) .message {
+    position: relative;
+    display: flex;
+    width: 100%;
+    padding: var(--cs-pad-y) calc(var(--cs-pad-x) + 4px);
+    border-radius: calc(var(--cs-radius) + 2px);
+    background: linear-gradient(180deg, rgba(40, 28, 20, 0.88) 0%, rgba(20, 14, 10, 0.88) 100%);
+    border: 1px solid rgba(255, 170, 90, 0.45);
+    box-shadow:
+        0 8px 28px rgba(0,0,0,.45),
+        0 0 0 1px rgba(255,170,90,.08),
+        inset 0 1px 0 rgba(255,220,180,.10);
+}
+
+/* Hairline corner brackets — top-left amber, bottom-right in the
+   platform color so you can tell where the alert came from. */
+:is(#chat, #chat-ghost) .event:not(.hidden-event) .message::before,
+:is(#chat, #chat-ghost) .event:not(.hidden-event) .message::after {
+    content: "";
+    position: absolute;
+    width: 28px; height: 28px;
+    pointer-events: none;
+    /* ChatRD paints big bits/gifts with an animated gradient on ::before;
+       clear it so it doesn't show up squashed into the bracket. */
+    background: none;
+    animation: none;
+    z-index: auto;
+}
+
+/* Big bits / gifts: warm glow on the card instead */
+:is(#chat, #chat-ghost) .event:not(.hidden-event)[class*="bigger-than-"] .message {
+    border-color: var(--cs-plat, var(--amber));
+    box-shadow:
+        0 8px 28px rgba(0,0,0,.45),
+        0 0 0 1px rgba(255,170,90,.12),
+        0 0 22px color-mix(in srgb, var(--cs-plat, var(--glow)) 35%, transparent);
+}
+:is(#chat, #chat-ghost) .event:not(.hidden-event) .message::before {
+    top: -1px; left: -1px;
+    border-top: 1px solid var(--amber);
+    border-left: 1px solid var(--amber);
+    border-radius: calc(var(--cs-radius) + 2px) 0 0 0;
+}
+:is(#chat, #chat-ghost) .event:not(.hidden-event) .message::after {
+    bottom: -1px; right: -1px;
+    border-bottom: 1px solid var(--cs-plat, var(--amber));
+    border-right: 1px solid var(--cs-plat, var(--amber));
+    border-radius: 0 0 calc(var(--cs-radius) + 2px) 0;
+}
+
+:is(#chat, #chat-ghost) .event .header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--amber);
+}
+:is(#chat, #chat-ghost) .event .header:empty { display: none; }
+
+:is(#chat, #chat-ghost) .event .info {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.2em;
+    line-height: 1.15;
+    gap: 6px;
+}
+:is(#chat, #chat-ghost) .event .info .platform img {
+    height: 18px;
+    filter: none;
+}
+
+:is(#chat, #chat-ghost) .event .user a {
+    background: linear-gradient(180deg, #ffd9a3 0%, var(--glow) 50%, var(--copper) 100%);
+    -webkit-background-clip: text;
+            background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    filter: drop-shadow(0 0 10px rgba(255,170,90,0.5));
+    padding-right: 0.08em;
+}
+
+:is(#chat, #chat-ghost) .event .value {
+    color: var(--glow);
+}
+:is(#chat, #chat-ghost) .event .value .gift-info .gift-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    background: rgba(255, 170, 90, 0.10);
+    border: 1px solid rgba(255, 170, 90, 0.3);
+}
+
+:is(#chat, #chat-ghost) .event .actual-message {
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--cs-msg-color);
+}
+:is(#chat, #chat-ghost) .event .actual-message:empty { display: none; }
+
+
+/* ============= GOAL / STAT BARS ============= */
+
+#statistics .platform,
+.goal-bar {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--cs-bg-strong);
+    border: 1px solid rgba(255, 170, 90, 0.25);
+    color: var(--paper);
+}
+.goal-bar .progressbar-fill {
+    background: linear-gradient(90deg, var(--copper), var(--amber), var(--glow));
+}

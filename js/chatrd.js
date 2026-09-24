@@ -113,7 +113,9 @@ const SKINS = {
     nutting: "skin-nutting.css?nocache=87",
     kimballs: "skin-kimballs.css?nocache=87",
     bubbles: "skin-bubbles.css?nocache=87",
-    'star-wars': "skin-star-wars.css?nocache=87"
+    'star-wars': "skin-star-wars.css?nocache=87",
+    cynspired: "skin-cynspired.css?nocache=87",
+    'cynspired-vertical': "skin-cynspired-vertical.css?nocache=87"
 };
 
 
