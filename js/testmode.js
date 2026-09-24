@@ -823,9 +823,26 @@ window.fireRandomTestEvent = TestMode.fireRandom;
 
 if (testModeAutoStart) {
     document.addEventListener('DOMContentLoaded', () => {
+        let waited = 0;
         const waitForConnection = setInterval(() => {
+            waited += 1000;
             if (streamerBotStatus.connected === true) {
                 clearInterval(waitForConnection);
+                TestMode.start();
+            }
+            // No Streamer.bot after 5s: start anyway with placeholder streamer
+            // info, so the demo can be previewed without Streamer.bot running.
+            else if (waited >= 5000) {
+                clearInterval(waitForConnection);
+                if (!streamerInfo.get) {
+                    streamerInfo.get = { platforms: {
+                        twitch:  { broadcastUser: 'Streamer' },
+                        youtube: { broadcastUserName: 'Streamer' },
+                        kick:    { broadcasterUserName: 'Streamer' },
+                        tiktok:  {}
+                    } };
+                }
+                console.info('[ChatRD][TestMode] Streamer.bot not connected, starting demo without it.');
                 TestMode.start();
             }
         }, 1000);
